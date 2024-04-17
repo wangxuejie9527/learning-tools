@@ -52,5 +52,11 @@
   "lazyCodeLoading": "requiredComponents",
   "useExtendedLib": {
     "weui": true
+  },
+  "plugins": {
+    "chatbot": {
+      "version": "1.4.1",
+      "provider": "wx8c631f7e9f2465e1"
+    }
   }
 }

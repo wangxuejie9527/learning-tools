@@ -4,6 +4,7 @@
 // 导入函数
 var sceneReadyBehavior = require('../../components/behavior-scene/scene-ready');
 var util = require('../../utils/util');
+var plugin = requirePlugin("chatbot");
 
 /**
  * tabs 初始定义
@@ -101,6 +102,8 @@ Page({
     this.tabHeight = shared(1000)
     this.tabTop = shared(0)
     this.tabTottom = shared(1000);
+
+    this.isSensitive = false;
 
     this.setData({
       height: screenHeight - statusBarHeight,
@@ -380,18 +383,26 @@ Page({
       })
     }
   },
-  submitComment(e) {
+  async submitComment(e) {
     console.log(e.detail.value['comment'])
 
     var comment = e.detail.value['comment'].toString().trim();
     if (comment.length == 0) {
       return;
     }
+    await this.check(comment);
+    if (this.isSensitive) {
+      this.isSensitive = false;
+      this.setData({
+        commentInput: ''
+      })
+      return;
+    }
 
     db.collection('daily-comment').add({
         // data 字段表示需新增的 JSON 数据
         data: {
-          category: "English",
+          category: 'English',
           comment: comment,
           createTime: db.serverDate(),
           date: util.formatTimeYYMMDD(new Date),
@@ -401,10 +412,36 @@ Page({
         }
       })
       .then(res => {
+        console.log('ref', res)
         this.refreshComment();
       });
+
+    this.isSensitive = false;
     this.setData({
       commentInput: ''
     })
   },
+  async check(inputWord) {
+    let sensitive = false;
+    await plugin.api.nlp('sensitive', {
+      q: inputWord,
+      mode: 'cnn'
+    }).then(res => {
+      sensitive = this.checkIsSensitive(res);
+      if (sensitive) {
+        console.log('输入的内容' + inputWord + '敏感');
+        this.isSensitive = true;
+      }
+    });
+  },
+  checkIsSensitive(res) {
+    let isSensitive = false;
+    for (let i = 0; i < res.result.length; i++) {
+      if (res.result[i][0] === 'other' && res.result[i][1] < 0.9) {
+        isSensitive = true;
+        break;
+      }
+    }
+    return isSensitive;
+  }
 })
