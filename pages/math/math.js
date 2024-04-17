@@ -49,8 +49,7 @@ const GestureState = {
 }
 
 Page({
-  behaviors: [sceneReadyBehavior],
-  behaviors: ['wx://form-field-button'],
+  behaviors: [sceneReadyBehavior, 'wx://form-field-button'],
   data: {
     // 起始被选中tab
     selectedTab: 0,
@@ -76,6 +75,7 @@ Page({
     list: [],
     tabHigh: 1000,
     commentInput: '',
+    height: 88,
   },
   /**
    * 页面加载中需要处理内容
@@ -93,7 +93,7 @@ Page({
     this._scaleX = shared(0.7)
     this._windowWidth = shared(windowWidth)
 
-    this.transY = shared(1000)
+    this.transY = shared(0)
     this.scrollTop = shared(0)
     this.startPan = shared(true)
     this.initTransY = shared(0) // 留言半屏的初始位置
@@ -123,7 +123,7 @@ Page({
 
     const query = this.createSelectorQuery()
     // ready 生命周期里才能获取到首屏的布局信息
-    query.select('.comment-header').boundingClientRect()
+    query.select('.upper').boundingClientRect()
     query.exec((res) => {
       this.transY.value = this.initTransY.value = screenHeight - res[0].height - (screenHeight - safeArea.bottom) - tabsHight
     })
@@ -138,6 +138,23 @@ Page({
     })
 
     this.refreshData()
+  },
+  onUnload() {
+    // 初始化动画类型为worklet
+    this.applyAnimatedStyle('.tab-border', () => {
+      'worklet'
+      return {
+        transform: `translateX(${this._translateX.value}px) scaleX(${this._scaleX.value})`,
+      }
+    })
+
+    this.applyAnimatedStyle('.comment-container', () => {
+      'worklet'
+      return {
+        transform: `translateY(${this.transY.value}px)`,
+      }
+    })
+
   },
   // tab 点击触发事件
   onTapTab(evt) {
@@ -374,7 +391,7 @@ Page({
     db.collection('daily-comment').add({
         // data 字段表示需新增的 JSON 数据
         data: {
-          category: "Math",
+          category: 'Math',
           comment: comment,
           createTime: db.serverDate(),
           date: util.formatTimeYYMMDD(new Date),

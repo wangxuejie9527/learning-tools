@@ -27,15 +27,17 @@
 <view class="comment-container" style="height: {{height}}px;">
   <!-- 顶部不参与手势协商，单独控制 -->
   <pan-gesture-handler worklet:ongesture="handlePan" style="flex-shrink: 0;">
-    <view class="comment-header" bind:touchend="handleTouchEnd">
-      <view class="comment-handler"></view>
+    <view class="upper">
+      <view class="comment-header" bind:touchend="handleTouchEnd">
+        <view class="comment-handler"></view>
 
-      <form style="height: 45px;" bindsubmit="submitComment">
-        <view class="footer-content">
-          <input class="footer-input" name="comment" placeholder="说点什么..." />
-          <button style=" margin-right: 10rpx;" size="mini" type="primary" form-type="submit">评论</button>
-        </view>
-      </form>
+        <form style="height: 45px;" bindsubmit="submitComment">
+          <view class="footer-content">
+            <input class="footer-input" value="{{commentInput}}" name="comment" placeholder="说点什么..." />
+            <button style=" margin-right: 10rpx;" size="mini" type="primary" form-type="submit">评论</button>
+          </view>
+        </form>
+      </view>
     </view>
   </pan-gesture-handler>
   <!-- 滚动区要与 pan 手势协商 -->
