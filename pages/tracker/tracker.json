@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "container-viewer": "../../components/container-viewer/index",
+    "ar-tracker": "../../components/ar-tracker/index",
+    "mp-navigation-bar": "../../components/navigation-bar/navigation-bar"
+  },
+  "navigationBarTitleText": "view",
+  "disableScroll": true, "renderer": "webview",
+  "navigationStyle": "custom"
+}

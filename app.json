@@ -1,0 +1,56 @@
+{
+  "pages": [
+    "pages/english/english",
+    "pages/math/math",
+    "pages/tracker/tracker"
+  ],
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#F7F7F7",
+    "list": [
+      {
+        "pagePath": "pages/english/english",
+        "iconPath": "assets/image/icon_component.png",
+        "selectedIconPath": "assets/image/icon_component_HL.png",
+        "text": "听一听"
+      },
+      {
+        "pagePath": "pages/tracker/tracker",
+        "iconPath": "assets/image/icon_component.png",
+        "selectedIconPath": "assets/image/icon_component_HL.png",
+        "text": "扫一扫"
+      },
+      {
+        "pagePath": "pages/math/math",
+        "iconPath": "assets/image/icon_component.png",
+        "selectedIconPath": "assets/image/icon_component_HL.png",
+        "text": "做一做"
+      }
+    ]
+  },
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "style": "v2",
+  "renderer": "skyline",
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true,
+      "disableABTest": true,
+      "sdkVersionBegin": "3.0.0",
+      "sdkVersionEnd": "15.255.255"
+    }
+  },
+  "usingComponents": {
+    "mp-navigation-bar": "/components/navigation-bar/navigation-bar"
+  },
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "useExtendedLib": {
+    "weui": true
+  }
+}
