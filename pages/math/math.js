@@ -49,6 +49,8 @@ const GestureState = {
   CANCELLED: 4, // 4 手势取消，
 }
 
+const date = util.formatTimeYYMMDD(new Date)
+
 Page({
   behaviors: [sceneReadyBehavior, 'wx://form-field-button'],
   data: {
@@ -77,6 +79,7 @@ Page({
     tabHigh: 1000,
     commentInput: '',
     height: 88,
+    showCommnet: wx.getStorageSync('showCommnet'),
   },
   /**
    * 页面加载中需要处理内容
@@ -124,23 +127,28 @@ Page({
       })
     })
 
-    const query = this.createSelectorQuery()
-    // ready 生命周期里才能获取到首屏的布局信息
-    query.select('.upper').boundingClientRect()
-    query.exec((res) => {
-      this.transY.value = this.initTransY.value = screenHeight - res[0].height - (screenHeight - safeArea.bottom) - tabsHight
-    })
-    console.log('transY', this.transY.value)
-    console.log('initTransY', this.initTransY.value)
-    // 通过 transY 一个 SharedValue 控制半屏的位置
-    this.applyAnimatedStyle('.comment-container', () => {
-      'worklet'
-      return {
-        transform: `translateY(${this.transY.value}px)`
-      }
-    })
+    if (this.data.showCommnet) {
+      const query = this.createSelectorQuery()
+      // ready 生命周期里才能获取到首屏的布局信息
+      query.select('.upper').boundingClientRect()
+      query.exec((res) => {
+        this.transY.value = this.initTransY.value = screenHeight - res[0].height - (screenHeight - safeArea.bottom) - tabsHight
+      })
+      console.log('transY', this.transY.value)
+      console.log('initTransY', this.initTransY.value)
+      // 通过 transY 一个 SharedValue 控制半屏的位置
+      this.applyAnimatedStyle('.comment-container', () => {
+        'worklet'
+        return {
+          transform: `translateY(${this.transY.value}px)`
+        }
+      })
+    }
 
     this.refreshData()
+  },
+  onShow(){
+    this.refreshComment(date);
   },
   onUnload() {
     // 初始化动画类型为worklet
@@ -158,6 +166,10 @@ Page({
       }
     })
 
+  },
+  onHide(){
+    // 收回 留言
+    this.transY.value = this.initTransY.value;
   },
   // tab 点击触发事件
   onTapTab(evt) {
@@ -390,7 +402,7 @@ Page({
     if (comment.length == 0) {
       return;
     }
-    var c = await this.check(comment);
+    await this.check(comment);
     if (this.isSensitive) {
       this.isSensitive = false;
       this.setData({
@@ -412,6 +424,7 @@ Page({
         }
       })
       .then(res => {
+        console.log('ref', res)
         this.refreshComment();
       });
 

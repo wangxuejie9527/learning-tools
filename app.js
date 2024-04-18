@@ -8,6 +8,7 @@ App({
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+    wx.setStorageSync('showCommnet', false)
 
     // 初始化云服务
     wx.cloud.init({
@@ -20,6 +21,15 @@ App({
       complete: res => {
         console.log('callFunction test result: ', res)
         wx.setStorageSync('openid', res.result.openid)
+      }
+    })
+
+    const db = wx.cloud.database();
+    db.collection('sw').limit(1).get({
+      success: function (res) {
+        console.log('sw', res.data)
+        var sc = res.data[0].sw == null ? false : res.data[0].sw;
+        wx.setStorageSync('showCommnet', res.data[0].sw)
       }
     })
 
@@ -37,7 +47,7 @@ App({
         console.log('init chatbot error', error)
       }, //非必填
     });
-    
+
     // 登录
     wx.login({
       success: res => {

@@ -24,7 +24,7 @@
   </swiper>
 </view>
 
-<view class="comment-container" style="height: {{height}}px;">
+<view wx:if="{{showCommnet}}" class="comment-container" style="height: {{height}}px;">
   <!-- 顶部不参与手势协商，单独控制 -->
   <pan-gesture-handler worklet:ongesture="handlePan" style="flex-shrink: 0;">
     <view class="upper">

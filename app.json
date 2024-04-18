@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/tracker/tracker",
     "pages/english/english",
-    "pages/math/math",
-    "pages/tracker/tracker"
+    "pages/math/math"
   ],
   "tabBar": {
     "color": "#7A7E83",
