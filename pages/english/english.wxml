@@ -34,7 +34,7 @@
         <form style="height: 45px;" bindsubmit="submitComment">
           <view class="footer-content">
             <input class="footer-input" value="{{commentInput}}" name="comment" placeholder="说点什么..." />
-            <button style=" margin-right: 10rpx;" size="mini" type="primary" form-type="submit">评论</button>
+            <button style=" margin-right: 10rpx;" size="mini" type="primary" form-type="submit">留言</button>
           </view>
         </form>
       </view>

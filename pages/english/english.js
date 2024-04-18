@@ -321,24 +321,24 @@ Page({
         // 在上面的位置
         if (this.upward.value) {
           this.scrollTo(this.tabTop.value)
-          wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value)
+          // wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value)
         } else {
           this.scrollTo(half)
-          wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value / 2)
+          // wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value / 2)
         }
       } else if (this.transY.value > half && this.transY.value <= this.initTransY.value) {
         // 在中间位置的时候
         if (this.upward.value) {
           this.scrollTo(half)
-          wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value / 2)
+          // wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value / 2)
         } else {
           this.scrollTo(this.initTransY.value)
-          wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value)
+          // wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value)
         }
       } else {
         // 在最下面的位置
         this.scrollTo(this.initTransY.value)
-        wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value)
+        // wx.worklet.runOnJS(this.setHeight.bind(this))(this.tabHeight.value)
       }
     }
   },
