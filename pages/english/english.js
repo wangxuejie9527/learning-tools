@@ -41,6 +41,7 @@ const {
   timing
 } = wx.worklet
 
+// 留言区滚动动作枚举
 const GestureState = {
   POSSIBLE: 0, // 0 此时手势未识别，如 panDown等
   BEGIN: 1, // 1 手势已识别
@@ -147,6 +148,7 @@ Page({
 
     this.refreshData()
   },
+  // 留言区在load后加载 show时开始加载 提升速度
   onShow() {
     this.refreshComment(date);
   },
@@ -167,6 +169,7 @@ Page({
     })
 
   },
+  // 切换tab时 重置留言区位置
   onHide() {
     // 收回 留言
     this.transY.value = this.initTransY.value;
@@ -216,12 +219,14 @@ Page({
     // end
     this._lastTranslateX.value = this._translateX.value
   },
+  // 刷新数据
   refreshData() {
     const date = util.formatTimeYYMMDD(new Date)
     console.log('date', date);
     this.refreshComment();
     this.refreshTabs();
   },
+  // 刷新留言
   refreshComment(date) {
     let that = this
     db.collection('daily-comment').where({
@@ -236,6 +241,7 @@ Page({
       }
     })
   },
+  // 刷新tab
   refreshTabs(date) {
     let that = this
     db.collection('ar-tracker').where({
@@ -269,6 +275,7 @@ Page({
       }
     })
   },
+  // 弃用
   bindNavTab() {
     this.setData({
       isEnglishCategory: !this.data.isEnglishCategory
@@ -285,6 +292,7 @@ Page({
       height: height
     })
   },
+  // 留言区滚动动画处理
   scrollTo(toValue) {
     'worklet'
 
@@ -395,6 +403,7 @@ Page({
       })
     }
   },
+  // 处理提交留言
   async submitComment(e) {
     console.log(e.detail.value['comment'])
 
@@ -402,6 +411,7 @@ Page({
     if (comment.length == 0) {
       return;
     }
+    // 校验敏感词
     await this.check(comment);
     if (this.isSensitive) {
       this.isSensitive = false;
@@ -433,8 +443,10 @@ Page({
       commentInput: ''
     })
   },
+   // 校验敏感词函数
   async check(inputWord) {
     let sensitive = false;
+    // 调用nlp接口
     await plugin.api.nlp('sensitive', {
       q: inputWord,
       mode: 'cnn'
@@ -446,6 +458,7 @@ Page({
       }
     });
   },
+  // 根据nlp接口判断是否包含敏感词
   checkIsSensitive(res) {
     let isSensitive = false;
     for (let i = 0; i < res.result.length; i++) {
